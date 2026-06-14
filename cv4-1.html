@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 4 Quiz — 100 Questions</title>
+    <style>
+        :root {
+            --bg: #f8f9fb;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --primary: #2563eb;
+            --primary-light: #dbeafe;
+            --correct: #16a34a;
+            --correct-bg: #dcfce7;
+            --wrong: #dc2626;
+            --wrong-bg: #fee2e2;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .header {
+            max-width: 900px;
+            margin: 0 auto 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+        
+        .subtitle {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 16px 24px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 900px;
+            margin: 0 auto 30px;
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+        
+        .progress-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+        
+        .progress-track {
+            flex: 1;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            margin: 0 20px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+        
+        .score-display {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .question-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        
+        .question-number {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        
+        .choices {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        
+        @media (min-width: 640px) {
+            .choices {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .choice-btn {
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            background: var(--card);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: left;
+            transition: all 0.2s ease;
+            color: var(--text);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .choice-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-1px);
+        }
+        
+        .choice-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        
+        .choice-btn:disabled {
+            cursor: default;
+            opacity: 0.7;
+        }
+        
+        .choice-btn.correct {
+            background: var(--correct-bg);
+            border-color: var(--correct);
+            color: var(--correct);
+            font-weight: 600;
+        }
+        
+        .choice-btn.wrong {
+            background: var(--wrong-bg);
+            border-color: var(--wrong);
+            color: var(--wrong);
+        }
+        
+        .choice-btn.inactive {
+            opacity: 0.5;
+            background: var(--bg);
+        }
+        
+        .explanation {
+            margin-top: 16px;
+            padding: 16px 18px;
+            background: #f0f9ff;
+            border-left: 4px solid var(--primary);
+            border-radius: 0 12px 12px 0;
+            font-size: 0.92rem;
+            color: var(--text);
+            display: none;
+            line-height: 1.6;
+        }
+        
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .explanation strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Lecture 4: Localization & Detection</h1>
+        <div class="subtitle">100 Questions — Object Localization and Detection (Manar M. Abdelmaksoud)</div>
+    </div>
+
+    <div class="progress-bar">
+        <span class="progress-text" id="progressText">0 / 100 answered</span>
+        <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="score-display" id="scoreDisplay">0 correct</div>
+    </div>
+
+    <div class="container" id="quizContainer">
+
+        <!-- Q1 -->
+        <div class="question-card" data-q="1">
+            <div class="question-number">Question 1</div>
+            <div class="question-text">Why should deep learning development not start from scratch in most engineering applications?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">It produces more accurate results than pretrained models</button>
+                <button class="choice-btn" data-choice="B">Applications often have limited data and resources</button>
+                <button class="choice-btn" data-choice="C">Existing models are always free without licensing issues</button>
+                <button class="choice-btn" data-choice="D">Starting from scratch needs less computational power</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                As I explained, training deep models from scratch requires designing the whole model, collecting large datasets, high computational power, and long training time. In many engineering applications, <strong>data is limited</strong> and <strong>resources are constrained</strong>, so the solution is to reuse existing work.
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="question-card" data-q="2">
+            <div class="question-number">Question 2</div>
+            <div class="question-text">What are the three main components we can reuse when building deep learning systems?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Data, algorithms, and cloud services</button>
+                <button class="choice-btn" data-choice="B">Datasets, models, and knowledge base</button>
+                <button class="choice-btn" data-choice="C">Hardware, software, and frameworks</button>
+                <button class="choice-btn" data-choice="D">Labels, weights, and architectures</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                Remember when I showed you the diagram? We can build deep learning systems by reusing three main components: <strong>Datasets</strong> to train and evaluate models, <strong>Models</strong> using published architectures and pretrained parameters, and <strong>Knowledge</strong> including proven techniques, hyperparameters, and shared codes.
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="question-card" data-q="3">
+            <div class="question-number">Question 3</div>
+            <div class="question-text">When selecting a publicly available dataset for your project, what is the most critical consideration?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">It must contain at least one million images</button>
+                <button class="choice-btn" data-choice="B">It should be relevant and match your task</button>
+                <button class="choice-btn" data-choice="C">It must be published within the last year only</button>
+                <button class="choice-btn" data-choice="D">It should only contain grayscale images</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                As I emphasized, many datasets are publicly available and can be used to train models or augment your own data. But it is important to make sure you use a dataset that is <strong>relevant and compatible</strong> with your application.
+            </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="question-card" data-q="4">
+            <div class="question-number">Question 4</div>
+            <div class="question-text">What is the primary advantage of using proven architectures like ResNet or VGGNet?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">They have been validated on real problems and save effort</button>
+                <button class="choice-btn" data-choice="B">They eliminate the need for training data entirely</button>
+                <button class="choice-btn" data-choice="C">They automatically adapt to any new task without changes</button>
+                <button class="choice-btn" data-choice="D">They require more computational power than custom models</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember when I discussed reusing models? Instead of designing models from scratch, we can reuse proven architectures — published network designs that have been validated on real problems. This allows <strong>faster development</strong> and <strong>better performance</strong> with less effort.
+            </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="question-card" data-q="5">
+            <div class="question-number">Question 5</div>
+            <div class="question-text">How can modern AI assistants help in the knowledge reuse component?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">By providing unlimited free cloud computing resources</button>
+                <button class="choice-btn" data-choice="B">By replacing the need for pretrained models entirely</button>
+                <button class="choice-btn" data-choice="C">By collecting new datasets automatically from the internet</button>
+                <button class="choice-btn" data-choice="D">By suggesting hyperparameters and optimization strategies</button>
+            </div>
+            <div class="explanation" data-correct="D">
+                As I explained, modern AI assistants like ChatGPT can help in building deep learning systems by suggesting suitable hyperparameters, selecting suitable optimization strategies, and helping generate and understand code implementations.
+            </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="question-card" data-q="6">
+            <div class="question-number">Question 6</div>
+            <div class="question-text">What is the fundamental idea behind transfer learning?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Training two models and averaging their predictions</button>
+                <button class="choice-btn" data-choice="B">Reusing pretrained weights for a new related task</button>
+                <button class="choice-btn" data-choice="C">Randomly initializing weights to improve generalization</button>
+                <button class="choice-btn" data-choice="D">Combining multiple datasets into one large training set</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                The key point here is that we don't start training from scratch. We start from a pretrained model and adapt it to the new task. This means we reuse the learned weights of a pretrained model as a <strong>starting point for a new, related task</strong>.
+            </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="question-card" data-q="7">
+            <div class="question-number">Question 7</div>
+            <div class="question-text">In which scenario is transfer learning most beneficial?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">When you have unlimited resources and massive labeled data</button>
+                <button class="choice-btn" data-choice="B">When target data is limited and resources are constrained</button>
+                <button class="choice-btn" data-choice="C">When the target task is unrelated to pretrained tasks</button>
+                <button class="choice-btn" data-choice="D">When you want to design a novel architecture from scratch</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                Remember when I listed the conditions for transfer learning? It is most beneficial when data for the target task is limited or expensive to collect, the target task is related to a pretrained task, and <strong>computational resources are limited</strong> so training from scratch is not feasible.
+            </div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="question-card" data-q="8">
+            <div class="question-number">Question 8</div>
+            <div class="question-text">When applying transfer learning, why must you modify the output layer of a pretrained model?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">The original layer reflects the original dataset's class count</button>
+                <button class="choice-btn" data-choice="B">The output layer always contains corrupted weights after training</button>
+                <button class="choice-btn" data-choice="C">The original layer is too large to fit in memory during inference</button>
+                <button class="choice-btn" data-choice="D">The output layer must be removed to reduce model complexity</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember when I walked you through the steps? You must remove the original output layer because it reflects the number of classes in the original dataset, and add a new one matching your specific number of classes.
+            </div>
+        </div>
+
+        <!-- Q9 -->
+        <div class="question-card" data-q="9">
+            <div class="question-number">Question 9</div>
+            <div class="question-text">If you have a small dataset for your target task, what is the recommended transfer learning strategy?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Train all layers from scratch with random initialization</button>
+                <button class="choice-btn" data-choice="B">Freeze features and fine-tune the classifier only</button>
+                <button class="choice-btn" data-choice="C">Remove all convolutional layers and keep only FC layers</button>
+                <button class="choice-btn" data-choice="D">Freeze early layers and retrain only the final classifier</button>
+            </div>
+            <div class="explanation" data-correct="D">
+                As I showed you in the diagrams, if you have a small dataset, you should <strong>freeze</strong> the parameters of the feature extraction layers and only train — or fine-tune — the final classifier layers. This prevents overfitting on limited data.
+            </div>
+        </div>
+
+        <!-- Q10 -->
+        <div class="question-card" data-q="10">
+            <div class="question-number">Question 10</div>
+            <div class="question-text">When you have a huge dataset for your target task, how should you use the pretrained model?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Use pretrained weights as initialization and train all layers</button>
+                <button class="choice-btn" data-choice="B">Discard pretrained weights and use random initialization</button>
+                <button class="choice-btn" data-choice="C">Freeze all layers and only train batch normalization parameters</button>
+                <button class="choice-btn" data-choice="D">Keep the model frozen and train a separate ensemble model</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember when I discussed the huge dataset case? You should use the pretrained parameters as <strong>weight initialization</strong> instead of random initialization, and then <strong>train all weights</strong> throughout the entire network. The pretrained weights give you a better starting point, but the large dataset allows you to adapt all features.
+            </div>
+        </div>
+
+        <!-- Q11 -->
+        <div class="question-card" data-q="11">
+            <div class="question-number">Question 11</div>
+            <div class="question-text">What is the key difference between localization and detection?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Localization finds one object; detection finds many objects</button>
+                <button class="choice-btn" data-choice="B">Localization uses color while detection uses grayscale</button>
+                <button class="choice-btn" data-choice="C">Localization requires a larger network than detection</button>
+                <button class="choice-btn" data-choice="D">Localization is faster because it only uses sliding windows</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I clearly distinguished in the lecture, <strong>localization</strong> is finding the exact location of one object in an image using a bounding box, while <strong>detection</strong> is finding the location of one or more objects. They can be from the same or different classes.
+            </div>
+        </div>
+
+        <!-- Q12 -->
+        <div class="question-card" data-q="12">
+            <div class="question-number">Question 12</div>
+            <div class="question-text">How is a bounding box mathematically defined in the coordinate system used in this lecture?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">By the top-left and bottom-right corner coordinates</button>
+                <button class="choice-btn" data-choice="B">By the box center point, box width, and box height</button>
+                <button class="choice-btn" data-choice="C">By the area of the object and the aspect ratio only</button>
+                <button class="choice-btn" data-choice="D">By the diagonal length and the rotation angle of the box</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                Remember when I showed you the grid diagram? The bounding box is defined by its <strong>Box Center Point (bx, by)</strong>, <strong>Box width (bw)</strong>, and <strong>Box height (bh)</strong>. The whole image is described by (0,0) at the top-left and (1,1) at the bottom-right.
+            </div>
+        </div>
+
+        <!-- Q13 -->
+        <div class="question-card" data-q="13">
+            <div class="question-number">Question 13</div>
+            <div class="question-text">What additional outputs does a localization/detection network produce compared to a simple classification network?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">It outputs only class probabilities without coordinates</button>
+                <button class="choice-btn" data-choice="B">It outputs confidence, box coordinates, and classes</button>
+                <button class="choice-btn" data-choice="C">It outputs image resolution and color channel information</button>
+                <button class="choice-btn" data-choice="D">It outputs a segmentation mask for every pixel</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                As I showed you in the diagrams, the localization/detection output includes <strong>Pc</strong> (the probability or confidence that an object exists), the <strong>bounding box coordinates (bx, by, bw, bh)</strong>, and the <strong>class probabilities (c1, c2, ...)</strong>. A simple classification network only outputs the class probabilities.
+            </div>
+        </div>
+
+        <!-- Q14 -->
+        <div class="question-card" data-q="14">
+            <div class="question-number">Question 14</div>
+            <div class="question-text">In the output vector for object detection, what happens when the object confidence Pc equals zero?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">The box coordinates are set to the image center by default</button>
+                <button class="choice-btn" data-choice="B">The other values are used to calculate the loss with reduced weight</button>
+                <button class="choice-btn" data-choice="C">The other values are ignored in the loss calculation</button>
+                <button class="choice-btn" data-choice="D">They are replaced with values from the previous frame</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                Remember Example 2 from the lecture? When there is no object and <strong>Pc = 0</strong>, the other values in the output vector are marked as "Don't Care." As I emphasized, we don't consider them while calculating the loss function.
+            </div>
+        </div>
+
+        <!-- Q15 -->
+        <div class="question-card" data-q="15">
+            <div class="question-number">Question 15</div>
+            <div class="question-text">Which task involves determining the label or class of an entire image without locating objects?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Detection with multiple bounding boxes</button>
+                <button class="choice-btn" data-choice="B">Classification of the entire image</button>
+                <button class="choice-btn" data-choice="C">Localization with one bounding box</button>
+                <button class="choice-btn" data-choice="D">Segmentation of pixel regions</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                As I explained, <strong>classification</strong> is the task of determining the label or class of an entire image. Localization goes further by finding the exact location of one object, and detection finds multiple objects.
+            </div>
+        </div>
+
+        <!-- Q16 -->
+        <div class="question-card" data-q="16">
+            <div class="question-number">Question 16</div>
+            <div class="question-text">In the sliding window approach, how is the final bounding box location determined?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">By selecting the window with the highest score above a threshold</button>
+                <button class="choice-btn" data-choice="B">By averaging coordinates of all window positions across the image</button>
+                <button class="choice-btn" data-choice="C">By choosing the first window that detects any object class</button>
+                <button class="choice-btn" data-choice="D">By using the window size covering half the image area</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I explained, we slide the window over the image by small steps and do a classification at each position, giving a score for the prediction of each window. The location(s) with a high score — higher than a certain threshold — is/are the predicted bounding box.
+            </div>
+        </div>
+
+        <!-- Q17 -->
+        <div class="question-card" data-q="17">
+            <div class="question-number">Question 17</div>
+            <div class="question-text">What does an Intersection over Union (IoU) score of 0.00 indicate?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">The two boxes have no overlapping area at all</button>
+                <button class="choice-btn" data-choice="B">The predicted box is slightly misaligned with the ground truth</button>
+                <button class="choice-btn" data-choice="C">The predicted box is smaller than the ground truth box</button>
+                <button class="choice-btn" data-choice="D">The boxes share at least half of their total area</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember the IoU examples I showed you? IoU is calculated as the intersection area divided by the union area. An IoU of <strong>0.00</strong> means there is no intersection at all between the predicted box and the ground truth box — they have no overlap.
+            </div>
+        </div>
+
+        <!-- Q18 -->
+        <div class="question-card" data-q="18">
+            <div class="question-number">Question 18</div>
+            <div class="question-text">How is the Intersection over Union (IoU) metric calculated?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">By dividing the intersection area by the union area</button>
+                <button class="choice-btn" data-choice="B">By multiplying the width and height of the predicted box only</button>
+                <button class="choice-btn" data-choice="C">By adding the areas of the predicted and ground truth boxes</button>
+                <button class="choice-btn" data-choice="D">By subtracting the intersection from the predicted box area</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I defined it in the lecture, <strong>IoU = The intersection area / The union area</strong>. The larger the IoU, the more accurate the predicted bounding box is compared to the ground truth.
+            </div>
+        </div>
+
+        <!-- Q19 -->
+        <div class="question-card" data-q="19">
+            <div class="question-number">Question 19</div>
+            <div class="question-text">Why is the sliding window approach considered too slow for real-time video detection?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">It can only process one color channel at a time</button>
+                <button class="choice-btn" data-choice="B">It requires ground truth labels for every window position</button>
+                <button class="choice-btn" data-choice="C">It uses a neural network that is too shallow</button>
+                <button class="choice-btn" data-choice="D">It must run the network many times for each image</button>
+            </div>
+            <div class="explanation" data-correct="D">
+                Remember when I listed the drawbacks? We need to slide the window by small steps, so we have to do the classification process several times. This means we need to go through the network several times, making the response very slow and not suitable to detect objects within video streams.
+            </div>
+        </div>
+
+        <!-- Q20 -->
+        <div class="question-card" data-q="20">
+            <div class="question-number">Question 20</div>
+            <div class="question-text">Why does the sliding window approach produce poor localization accuracy?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Because it uses too many color channels in the input</button>
+                <button class="choice-btn" data-choice="B">Because the network architecture is always too shallow</button>
+                <button class="choice-btn" data-choice="C">Because box dimensions depend on the window size</button>
+                <button class="choice-btn" data-choice="D">Because box dimensions are fixed to the window size</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                As I explained, the dimensions of bounding boxes are not flexible — they depend on the predefined dimensions of the sliding window. So the detection and localization accuracy is not good because the box cannot adapt to the object's actual size and shape.
+            </div>
+        </div>
+
+        <!-- Q21 -->
+        <div class="question-card" data-q="21">
+            <div class="question-number">Question 21</div>
+            <div class="question-text">What is the first step in the YOLO object detection pipeline?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Apply non-maximum suppression to remove duplicate predictions</button>
+                <button class="choice-btn" data-choice="B">Divide the input image into an S × S grid of cells</button>
+                <button class="choice-btn" data-choice="C">Generate the final set of bounding boxes with class labels</button>
+                <button class="choice-btn" data-choice="D">Take an input image of any size to begin detection</button>
+            </div>
+            <div class="explanation" data-correct="D">
+                As I outlined in the YOLO steps, the very first step is to take an input image of any size. Then we divide it into a grid, make predictions, apply NMS, and finally generate the output.
+            </div>
+        </div>
+
+        <!-- Q22 -->
+        <div class="question-card" data-q="22">
+            <div class="question-number">Question 22</div>
+            <div class="question-text">In YOLO, when is a grid cell considered to contain an object?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">When any corner of the object enters the cell</button>
+                <button class="choice-btn" data-choice="B">When the majority of the object area lies inside the cell</button>
+                <button class="choice-btn" data-choice="C">When the object touches the boundary of the cell</button>
+                <button class="choice-btn" data-choice="D">When the object center point falls inside the cell</button>
+            </div>
+            <div class="explanation" data-correct="D">
+                This is a crucial detail I emphasized in the lecture. The cell is said to have an object if the <strong>object center is located inside</strong> that cell. This is how YOLO assigns responsibility for detecting an object to a specific grid cell.
+            </div>
+        </div>
+
+        <!-- Q23 -->
+        <div class="question-card" data-q="23">
+            <div class="question-number">Question 23</div>
+            <div class="question-text">Why does YOLO not require fully connected (FC) layers in its architecture?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Because the output is a matrix representing the grid cells</button>
+                <button class="choice-btn" data-choice="B">Because FC layers are too expensive for mobile devices only</button>
+                <button class="choice-btn" data-choice="C">Because the input images are always smaller than 64×64 pixels</button>
+                <button class="choice-btn" data-choice="D">Because FC layers cannot process color images with three channels</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember when I explained the network architecture? I said it is just CNN layers — we don't need FC layers because the targeted output is a <strong>matrix</strong> (or tensor). Once the matrix is generated, we can directly plot the bounding boxes using it.
+            </div>
+        </div>
+
+        <!-- Q24 -->
+        <div class="question-card" data-q="24">
+            <div class="question-number">Question 24</div>
+            <div class="question-text">What is the primary goal of Non-Maximum Suppression (NMS) in YOLO?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">To increase the confidence scores of weak predictions</button>
+                <button class="choice-btn" data-choice="B">To convert the grid output into a vector format</button>
+                <button class="choice-btn" data-choice="C">To remove overlapping boxes and keep the best per object</button>
+                <button class="choice-btn" data-choice="D">To add more boxes around low-confidence detections</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                As I explained, NMS is an algorithm applied after predicting the boundary boxes. Its goal is to <strong>remove the overlapping boxes</strong> and keep only the best detection for each object. It filters out duplicate or low-confidence predictions.
+            </div>
+        </div>
+
+        <!-- Q25 -->
+        <div class="question-card" data-q="25">
+            <div class="question-number">Question 25</div>
+            <div class="question-text">During NMS, what happens to bounding boxes with a confidence score Pc below 0.6?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">They are immediately discarded from further consideration</button>
+                <button class="choice-btn" data-choice="B">They are merged with adjacent boxes using average coordinates</button>
+                <button class="choice-btn" data-choice="C">Their scores are boosted by a fixed multiplier</button>
+                <button class="choice-btn" data-choice="D">They are resized to match the largest box in the image</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember the NMS steps I detailed? Within each class, we first remove all boxes with <strong>Pc < 0.6</strong> (you can change this threshold). These low-confidence predictions are immediately discarded before we check for overlapping boxes.
+            </div>
+        </div>
+
+        <!-- Q26 -->
+        <div class="question-card" data-q="26">
+            <div class="question-number">Question 26</div>
+            <div class="question-text">How does NMS allow YOLO to detect multiple objects from the same class in one image?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">By increasing the grid size to contain only one object per cell</button>
+                <button class="choice-btn" data-choice="B">By keeping boxes whose mutual IoU is below the threshold</button>
+                <button class="choice-btn" data-choice="C">By assigning each object to a different class label</button>
+                <button class="choice-btn" data-choice="D">By reducing the confidence threshold to zero for all detections</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                As I explained, NMS allows us to detect multiple objects from the same class because the <strong>IoU between them is lower than the threshold</strong> (e.g., 0.5). Since they don't overlap significantly, the predicted boxes are not discarded as duplicates.
+            </div>
+        </div>
+
+        <!-- Q27 -->
+        <div class="question-card" data-q="27">
+            <div class="question-number">Question 27</div>
+            <div class="question-text">Which of the following correctly lists the five YOLO steps in order?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Input → Grid → Box Predict → NMS</button>
+                <button class="choice-btn" data-choice="B">Input → NMS → Grid → Box Predict</button>
+                <button class="choice-btn" data-choice="C">Grid → Input → Box Predict → NMS</button>
+                <button class="choice-btn" data-choice="D">Input → Box Predict → Grid → NMS</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember the summary at the end of the YOLO section? The five steps are: 1) Input Image, 2) Grid Division, 3) Bounding Box Prediction, 4) Non-Maximum Suppression, and 5) Output the final set of bounding boxes.
+            </div>
+        </div>
+
+        <!-- Q28 -->
+        <div class="question-card" data-q="28">
+            <div class="question-number">Question 28</div>
+            <div class="question-text">What issue during YOLO's bounding box prediction step makes NMS necessary?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">The grid fails to detect objects near image edges</button>
+                <button class="choice-btn" data-choice="B">The class probabilities do not sum to exactly one</button>
+                <button class="choice-btn" data-choice="C">The network outputs too few boxes to cover objects</button>
+                <button class="choice-btn" data-choice="D">The network makes duplicate boxes for one object</button>
+            </div>
+            <div class="explanation" data-correct="D">
+                As I pointed out, after bounding box prediction, we may get boxes with low accuracy, and we may also get <strong>several boxes for the same object</strong>. This is exactly why we need Non-Maximum Suppression — to clean up these duplicate and overlapping predictions.
+            </div>
+        </div>
+
+        <!-- Q29 -->
+        <div class="question-card" data-q="29">
+            <div class="question-number">Question 29</div>
+            <div class="question-text">What is a key drawback of traditional NMS that YOLO26 eliminates?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">NMS cannot process more than twenty boxes per image</button>
+                <button class="choice-btn" data-choice="B">NMS requires too much memory for storing coordinates</button>
+                <button class="choice-btn" data-choice="C">NMS adds time and fixed thresholds</button>
+                <button class="choice-btn" data-choice="D">NMS only works with square bounding box shapes</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                As I explained, while NMS is effective, it adds extra time and complexity to the pipeline. More importantly, it depends on <strong>thresholds and heuristics</strong>, not learned behavior. YOLO26 introduces an end-to-end mode where overlapping predictions are handled inside the network itself.
+            </div>
+        </div>
+
+        <!-- Q30 -->
+        <div class="question-card" data-q="30">
+            <div class="question-number">Question 30</div>
+            <div class="question-text">How does YOLO26 handle overlapping predictions differently from older YOLO versions?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">It handles overlapping predictions inside the network itself</button>
+                <button class="choice-btn" data-choice="B">It uses a larger grid size to separate objects naturally</button>
+                <button class="choice-btn" data-choice="C">It ignores all predictions with confidence below 0.9</button>
+                <button class="choice-btn" data-choice="D">It processes each object class with a separate sub-network</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember when I compared the old and new pipelines? YOLO26 introduces an end-to-end mode where the model directly outputs final detections. <strong>Overlapping predictions are handled inside the network itself</strong>, so it is totally learned behavior rather than post-processing.
+            </div>
+        </div>
+
+        <!-- Q31 -->
+        <div class="question-card" data-q="31">
+            <div class="question-number">Question 31</div>
+            <div class="question-text">Using existing resources enables faster development, better performance, and...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">More complex model architectures</button>
+                <button class="choice-btn" data-choice="B">Reduced computational cost</button>
+                <button class="choice-btn" data-choice="C">Larger dataset requirements</button>
+                <button class="choice-btn" data-choice="D">Slower training convergence</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                As I explained in the first part of the lecture, using existing resources enables three things: <strong>faster development</strong>, <strong>better performance</strong>, and <strong>reduced computational cost</strong>. These are the core benefits of not starting from scratch.
+            </div>
+        </div>
+
+        <!-- Q32 -->
+        <div class="question-card" data-q="32">
+            <div class="question-number">Question 32</div>
+            <div class="question-text">Deep learning development does not start from scratch because...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Many tools and datasets already exist</button>
+                <button class="choice-btn" data-choice="B">All problems are already solved</button>
+                <button class="choice-btn" data-choice="C">Reusing resources saves time and effort</button>
+                <button class="choice-btn" data-choice="D">Hardware is too slow for new training</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                Remember when I introduced this topic? Deep learning development does not start from scratch because a lot of <strong>datasets, models, and tools</strong> already exist. Reusing these resources saves time and effort while delivering better results.
+            </div>
+        </div>
+
+        <!-- Q33 -->
+        <div class="question-card" data-q="33">
+            <div class="question-number">Question 33</div>
+            <div class="question-text">In engineering applications, training from scratch is problematic because...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Engineers prefer manual extraction</button>
+                <button class="choice-btn" data-choice="B">Cloud computing is unavailable</button>
+                <button class="choice-btn" data-choice="C">Datasets are always perfectly labeled</button>
+                <button class="choice-btn" data-choice="D">Data and resources are often limited</button>
+            </div>
+            <div class="explanation" data-correct="D">
+                As I emphasized with the mountain image, training from scratch demands model complexity, large datasets, high power, and long time. In engineering applications, <strong>data is limited</strong> and <strong>resources are constrained</strong>, making reuse essential.
+            </div>
+        </div>
+
+        <!-- Q34 -->
+        <div class="question-card" data-q="34">
+            <div class="question-number">Question 34</div>
+            <div class="question-text">The mountain image in the lecture symbolizes the challenges of...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Complexity, datasets, and high power</button>
+                <button class="choice-btn" data-choice="B">Simple algorithms with small memory needs</button>
+                <button class="choice-btn" data-choice="C">Reusing weights without any changes</button>
+                <button class="choice-btn" data-choice="D">Training models on only one GPU core</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember the mountain image I showed? It symbolizes the three major challenges of training from scratch: <strong>model complexity</strong>, <strong>large datasets</strong>, and <strong>high computational power</strong> — plus the long time required.
+            </div>
+        </div>
+
+        <!-- Q35 -->
+        <div class="question-card" data-q="35">
+            <div class="question-number">Question 35</div>
+            <div class="question-text">Which component of reuse includes "proven techniques and shared codes"?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Datasets</button>
+                <button class="choice-btn" data-choice="B">Models</button>
+                <button class="choice-btn" data-choice="C">Knowledge</button>
+                <button class="choice-btn" data-choice="D">Assistants</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                As I showed in the three-component diagram, the <strong>Knowledge</strong> component includes proven techniques, hyperparameters, and shared codes. Datasets provide data, models provide architectures, and knowledge provides the know-how.
+            </div>
+        </div>
+
+        <!-- Q36 -->
+        <div class="question-card" data-q="36">
+            <div class="question-number">Question 36</div>
+            <div class="question-text">Which reuse component uses published architectures and pretrained parameters?</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Datasets</button>
+                <button class="choice-btn" data-choice="B">Knowledge</button>
+                <button class="choice-btn" data-choice="C">Models</button>
+                <button class="choice-btn" data-choice="D">Assistants</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                Remember the diagram? The <strong>Models</strong> component is about using published architectures and pretrained parameters. This is distinct from datasets (data) and knowledge (techniques).
+            </div>
+        </div>
+
+        <!-- Q37 -->
+        <div class="question-card" data-q="37">
+            <div class="question-number">Question 37</div>
+            <div class="question-text">Existing datasets are primarily used to train and evaluate...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Models and validate results</button>
+                <button class="choice-btn" data-choice="B">Loss functions and metrics</button>
+                <button class="choice-btn" data-choice="C">Optimizers and learning rates</button>
+                <button class="choice-btn" data-choice="D">Hyperparameters and thresholds</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I explained, we use existing datasets to <strong>train and evaluate models</strong>. They provide the labeled data needed to teach the network and measure its performance.
+            </div>
+        </div>
+
+        <!-- Q38 -->
+        <div class="question-card" data-q="38">
+            <div class="question-number">Question 38</div>
+            <div class="question-text">When using an existing dataset, the most critical factor is ensuring it is...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Published within the current year only</button>
+                <button class="choice-btn" data-choice="B">Relevant and compatible with your task</button>
+                <button class="choice-btn" data-choice="C">Larger than one million images total</button>
+                <button class="choice-btn" data-choice="D">Collected by a famous university lab</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                I stressed this point: you must make sure to use a dataset that is <strong>relevant and compatible</strong> with your application. Size or source matter less than matching your actual task.
+            </div>
+        </div>
+
+        <!-- Q39 -->
+        <div class="question-card" data-q="39">
+            <div class="question-number">Question 39</div>
+            <div class="question-text">Public datasets can be used to augment...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Your model's layer count</button>
+                <button class="choice-btn" data-choice="B">Your own existing data</button>
+                <button class="choice-btn" data-choice="C">The network's learning rate</button>
+                <button class="choice-btn" data-choice="D">The optimizer's momentum</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                As I mentioned, existing datasets can be used to <strong>augment your own data</strong>. Combining public data with your private data helps improve model robustness without collecting everything yourself.
+            </div>
+        </div>
+
+        <!-- Q40 -->
+        <div class="question-card" data-q="40">
+            <div class="question-number">Question 40</div>
+            <div class="question-text">Pretrained models are models already trained on large datasets and are ready to be...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Discarded after one use</button>
+                <button class="choice-btn" data-choice="B">Used only for classification</button>
+                <button class="choice-btn" data-choice="C">Converted to smaller formats</button>
+                <button class="choice-btn" data-choice="D">Adapted to new related tasks</button>
+            </div>
+            <div class="explanation" data-correct="D">
+                Remember my definition? Pretrained models are already trained on large datasets and are ready to be <strong>adapted to new related tasks</strong> through transfer learning.
+            </div>
+        </div>
+
+        <!-- Q41 -->
+        <div class="question-card" data-q="41">
+            <div class="question-number">Question 41</div>
+            <div class="question-text">Reusing proven architectures allows faster development and better performance with...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Less effort and lower cost</button>
+                <button class="choice-btn" data-choice="B">Larger batch sizes</button>
+                <button class="choice-btn" data-choice="C">Deeper networks only</button>
+                <button class="choice-btn" data-choice="D">More hyperparameter tuning</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I explained, reusing proven architectures allows <strong>faster development</strong> and <strong>better performance</strong> with less effort. You don't need to redesign what already works.
+            </div>
+        </div>
+
+        <!-- Q42 -->
+        <div class="question-card" data-q="42">
+            <div class="question-number">Question 42</div>
+            <div class="question-text">The knowledge component includes proven techniques, hyperparameters, and...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Shared codes and scripts</button>
+                <button class="choice-btn" data-choice="B">Private datasets and labels</button>
+                <button class="choice-btn" data-choice="C">Cloud servers and storage</button>
+                <button class="choice-btn" data-choice="D">Hardware chips and GPUs</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember the knowledge block in the diagram? It includes proven techniques, hyperparameters, and <strong>shared codes</strong>. Researchers share their implementations so others can replicate their training strategies.
+            </div>
+        </div>
+
+        <!-- Q43 -->
+        <div class="question-card" data-q="43">
+            <div class="question-number">Question 43</div>
+            <div class="question-text">Model performance depends on proper selection of hyperparameters, training strategies, and...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Random initialization seeds</button>
+                <button class="choice-btn" data-choice="B">Hardware selection methods</button>
+                <button class="choice-btn" data-choice="C">Optimization techniques</button>
+                <button class="choice-btn" data-choice="D">Marketing materials</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                As I explained, model performance does not depend only on the architecture. It also depends on proper selection of <strong>hyperparameters</strong>, <strong>training strategies</strong>, and <strong>optimization techniques</strong>.
+            </div>
+        </div>
+
+        <!-- Q44 -->
+        <div class="question-card" data-q="44">
+            <div class="question-number">Question 44</div>
+            <div class="question-text">Researchers share their work by providing code that reflects their choices in...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Hardware selection methods</button>
+                <button class="choice-btn" data-choice="B">Dataset collection</button>
+                <button class="choice-btn" data-choice="C">Parameters and strategies</button>
+                <button class="choice-btn" data-choice="D">Marketing materials</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                Remember when I discussed knowledge reuse? Many researchers share their work by providing code implementation, which reflects their choices in <strong>hyperparameters</strong> and <strong>training strategies</strong>.
+            </div>
+        </div>
+
+        <!-- Q45 -->
+        <div class="question-card" data-q="45">
+            <div class="question-number">Question 45</div>
+            <div class="question-text">AI assistants can recommend pretrained models for...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Specific target tasks</button>
+                <button class="choice-btn" data-choice="B">General web browsing</button>
+                <button class="choice-btn" data-choice="C">Text translation only</button>
+                <button class="choice-btn" data-choice="D">Image compression tasks</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I showed in the AI-assistants slide, they can suggest suitable architectures and <strong>recommend pretrained models for specific tasks</strong>. This helps you find the right starting point quickly.
+            </div>
+        </div>
+
+        <!-- Q46 -->
+        <div class="question-card" data-q="46">
+            <div class="question-number">Question 46</div>
+            <div class="question-text">AI assistants help generate and understand...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Code implementations</button>
+                <button class="choice-btn" data-choice="B">Mathematical proofs</button>
+                <button class="choice-btn" data-choice="C">Legal contracts</button>
+                <button class="choice-btn" data-choice="D">Music compositions</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember the knowledge section? AI assistants help generate and understand <strong>code implementations</strong>. This is part of the knowledge reuse component — getting the coding details right.
+            </div>
+        </div>
+
+        <!-- Q47 -->
+        <div class="question-card" data-q="47">
+            <div class="question-number">Question 47</div>
+            <div class="question-text">Datasets, models, and knowledge are combined efficiently using...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Random forests</button>
+                <button class="choice-btn" data-choice="B">Transfer learning</button>
+                <button class="choice-btn" data-choice="C">K-means clustering</button>
+                <button class="choice-btn" data-choice="D">Linear regression</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                As I explained when putting it all together, we combine datasets, models, and knowledge efficiently <strong>by using transfer learning</strong>. This is the bridge that connects all three reuse components.
+            </div>
+        </div>
+
+        <!-- Q48 -->
+        <div class="question-card" data-q="48">
+            <div class="question-number">Question 48</div>
+            <div class="question-text">Direct reuse of pretrained models is often insufficient because real-world tasks require...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Larger batch sizes</button>
+                <button class="choice-btn" data-choice="B">More training epochs</button>
+                <button class="choice-btn" data-choice="C">Faster hardware</button>
+                <button class="choice-btn" data-choice="D">Task adaptation</button>
+            </div>
+            <div class="explanation" data-correct="D">
+                Remember when I explained transfer learning? Even with available datasets and proven architectures, direct reuse is often not enough because <strong>real-world tasks require adaptation</strong>, not just copying.
+            </div>
+        </div>
+
+        <!-- Q49 -->
+        <div class="question-card" data-q="49">
+            <div class="question-number">Question 49</div>
+            <div class="question-text">Pretrained models are typically trained on...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">General broad datasets</button>
+                <button class="choice-btn" data-choice="B">Target-specific datasets</button>
+                <button class="choice-btn" data-choice="C">Empty image collections</button>
+                <button class="choice-btn" data-choice="D">Single-object images only</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I explained, pretrained models are trained on <strong>general datasets</strong> like ImageNet. Your application is often specific or different, which is why adaptation through transfer learning is necessary.
+            </div>
+        </div>
+
+        <!-- Q50 -->
+        <div class="question-card" data-q="50">
+            <div class="question-number">Question 50</div>
+            <div class="question-text">In transfer learning, adaptation means reusing learned weights as a...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Starting point for new tasks</button>
+                <button class="choice-btn" data-choice="B">Final solution without changes</button>
+                <button class="choice-btn" data-choice="C">Random noise generator</button>
+                <button class="choice-btn" data-choice="D">Dataset augmentation tool</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                The key concept here is that adaptation means we reuse the learned weights of a pretrained model as a <strong>starting point for a new, related task</strong>. We don't treat them as the final answer.
+            </div>
+        </div>
+
+        <!-- Q51 -->
+        <div class="question-card" data-q="51">
+            <div class="question-number">Question 51</div>
+            <div class="question-text">Transfer learning is most useful when data for the target task is...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Unlimited and free</button>
+                <button class="choice-btn" data-choice="B">Already labeled perfectly</button>
+                <button class="choice-btn" data-choice="C">Limited or expensive</button>
+                <button class="choice-btn" data-choice="D">Stored in the cloud</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                Remember the conditions I listed? Transfer learning is ideal when data for the target task is <strong>limited or expensive to collect</strong>. This is the classic use case for reusing pretrained knowledge.
+            </div>
+        </div>
+
+        <!-- Q52 -->
+        <div class="question-card" data-q="52">
+            <div class="question-number">Question 52</div>
+            <div class="question-text">One goal of transfer learning is to improve model performance and...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Reduce the number of layers</button>
+                <button class="choice-btn" data-choice="B">Increase training time</button>
+                <button class="choice-btn" data-choice="C">Use smaller input images</button>
+                <button class="choice-btn" data-choice="D">Generalization on target</button>
+            </div>
+            <div class="explanation" data-correct="D">
+                As I explained, we aim to improve model performance and <strong>generalization on the target task</strong>. Transfer learning helps the model perform well even when target data is scarce.
+            </div>
+        </div>
+
+        <!-- Q53 -->
+        <div class="question-card" data-q="53">
+            <div class="question-number">Question 53</div>
+            <div class="question-text">The first step in applying transfer learning is to select a...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Pretrained model</button>
+                <button class="choice-btn" data-choice="B">New optimizer</button>
+                <button class="choice-btn" data-choice="C">Large batch size</button>
+                <button class="choice-btn" data-choice="D">Different loss function</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember the four steps I outlined? Step 1 is to <strong>select a pretrained model</strong> — choose one that is suitable for your task and has been trained on related data.
+            </div>
+        </div>
+
+        <!-- Q54 -->
+        <div class="question-card" data-q="54">
+            <div class="question-number">Question 54</div>
+            <div class="question-text">When modifying a pretrained model, you must replace the original output layer because it reflects the...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Original class count</button>
+                <button class="choice-btn" data-choice="B">Number of hidden layers</button>
+                <button class="choice-btn" data-choice="C">Image resolution used</button>
+                <button class="choice-btn" data-choice="D">Training epoch count</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I explained in step 3, you remove the original output layer because it reflects the <strong>original dataset's class count</strong>. You must add a new layer matching your specific number of classes.
+            </div>
+        </div>
+
+        <!-- Q55 -->
+        <div class="question-card" data-q="55">
+            <div class="question-number">Question 55</div>
+            <div class="question-text">In transfer learning, freezing some layers means we...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Delete them from network</button>
+                <button class="choice-btn" data-choice="B">Keep learned features fixed</button>
+                <button class="choice-btn" data-choice="C">Randomize their weights</button>
+                <button class="choice-btn" data-choice="D">Double their learning rate</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                Remember step 4? Freezing some layers means we <strong>keep their learned features fixed</strong> and do not update their weights during training. We only train the layers that need adaptation.
+            </div>
+        </div>
+
+        <!-- Q56 -->
+        <div class="question-card" data-q="56">
+            <div class="question-number">Question 56</div>
+            <div class="question-text">With a small dataset, the recommended strategy is to freeze feature extraction layers and...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Train all convolutional layers</button>
+                <button class="choice-btn" data-choice="B">Remove the pooling layers</button>
+                <button class="choice-btn" data-choice="C">Add more fully connected layers</button>
+                <button class="choice-btn" data-choice="D">Fine-tune the classifier only</button>
+            </div>
+            <div class="explanation" data-correct="D">
+                As I showed in the small dataset diagram, you freeze the feature extraction layers and only <strong>fine-tune the classifier</strong>. This prevents overfitting your limited data.
+            </div>
+        </div>
+
+        <!-- Q57 -->
+        <div class="question-card" data-q="57">
+            <div class="question-number">Question 57</div>
+            <div class="question-text">With a large dataset, you should freeze early layers and...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Fine-tune more layers</button>
+                <button class="choice-btn" data-choice="B">Delete the pretrained weights</button>
+                <button class="choice-btn" data-choice="C">Use random initialization</button>
+                <button class="choice-btn" data-choice="D">Keep all layers frozen</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember the progression? With a large dataset, you can afford to <strong>fine-tune more layers</strong> while still keeping early layers frozen to preserve low-level features.
+            </div>
+        </div>
+
+        <!-- Q58 -->
+        <div class="question-card" data-q="58">
+            <div class="question-number">Question 58</div>
+            <div class="question-text">With a larger dataset compared to large, you should train...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Even more layers</button>
+                <button class="choice-btn" data-choice="B">Fewer layers</button>
+                <button class="choice-btn" data-choice="C">Only the first layer</button>
+                <button class="choice-btn" data-choice="D">No layers at all</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I showed in the diagrams, with a larger dataset you can <strong>train even more layers</strong>. The more data you have, the more layers you can safely unfreeze and update.
+            </div>
+        </div>
+
+        <!-- Q59 -->
+        <div class="question-card" data-q="59">
+            <div class="question-number">Question 59</div>
+            <div class="question-text">With a huge dataset, pretrained weights serve as...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">The final model output</button>
+                <button class="choice-btn" data-choice="B">Data augmentation</button>
+                <button class="choice-btn" data-choice="C">Weight initialization</button>
+                <button class="choice-btn" data-choice="D">Loss function</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                Remember the huge dataset case? You use the pretrained parameters as <strong>weight initialization</strong> instead of random initialization, then train all weights. The pretrained weights give you a better starting point.
+            </div>
+        </div>
+
+        <!-- Q60 -->
+        <div class="question-card" data-q="60">
+            <div class="question-number">Question 60</div>
+            <div class="question-text">Lecture 4 Part 2 focuses on...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Generative adversarial networks</button>
+                <button class="choice-btn" data-choice="B">Recurrent neural networks</button>
+                <button class="choice-btn" data-choice="C">Reinforcement learning</button>
+                <button class="choice-btn" data-choice="D">Localization and detection</button>
+            </div>
+            <div class="explanation" data-correct="D">
+                As the title slide clearly states, Part 2 of this lecture covers <strong>Localization and Detection</strong>. This is the core topic after we covered transfer learning and resource reuse in Part 1.
+            </div>
+        </div>
+
+        <!-- Q61 -->
+        <div class="question-card" data-q="61">
+            <div class="question-number">Question 61</div>
+            <div class="question-text">Classification assigns a single label to...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">The entire input image</button>
+                <button class="choice-btn" data-choice="B">Each bounding box</button>
+                <button class="choice-btn" data-choice="C">Every pixel in the image</button>
+                <button class="choice-btn" data-choice="D">Multiple objects separately</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember the definitions? <strong>Classification</strong> assigns a single label to the entire input image. It answers "what is in this image?" without telling you where it is.
+            </div>
+        </div>
+
+        <!-- Q62 -->
+        <div class="question-card" data-q="62">
+            <div class="question-number">Question 62</div>
+            <div class="question-text">Detection can identify objects that belong to...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Same or different classes</button>
+                <button class="choice-btn" data-choice="B">Only one class per image</button>
+                <button class="choice-btn" data-choice="C">Background regions only</button>
+                <button class="choice-btn" data-choice="D">Grayscale images only</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I explained, detection can find objects from <strong>same or different classes</strong> in one image. The example I showed had both dogs and cats detected together.
+            </div>
+        </div>
+
+        <!-- Q63 -->
+        <div class="question-card" data-q="63">
+            <div class="question-number">Question 63</div>
+            <div class="question-text">Detection finds the location of one or more objects using...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Color histograms</button>
+                <button class="choice-btn" data-choice="B">Edge detection maps</button>
+                <button class="choice-btn" data-choice="C">Bounding box shapes</button>
+                <button class="choice-btn" data-choice="D">Texture descriptors</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                Remember the definition? Detection finds the location of one or more objects using <strong>bounding boxes</strong>. They can be from same or different classes.
+            </div>
+        </div>
+
+        <!-- Q64 -->
+        <div class="question-card" data-q="64">
+            <div class="question-number">Question 64</div>
+            <div class="question-text">In the bounding box coordinate system, the top-left point is...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">(1, 1)</button>
+                <button class="choice-btn" data-choice="B">(0.5, 0.5)</button>
+                <button class="choice-btn" data-choice="C">(1, 0)</button>
+                <button class="choice-btn" data-choice="D">(0, 0)</button>
+            </div>
+            <div class="explanation" data-correct="D">
+                As I showed in the coordinate diagram, the top-left point of the image is <strong>(0, 0)</strong> and the bottom-right point is (1, 1) in the normalized coordinate system.
+            </div>
+        </div>
+
+        <!-- Q65 -->
+        <div class="question-card" data-q="65">
+            <div class="question-number">Question 65</div>
+            <div class="question-text">The bottom-right corner of the normalized image coordinate system is...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">(1, 1)</button>
+                <button class="choice-btn" data-choice="B">(0, 0)</button>
+                <button class="choice-btn" data-choice="C">(0, 1)</button>
+                <button class="choice-btn" data-choice="D">(1, 0)</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember the diagram? The bottom-right point of the normalized image is <strong>(1, 1)</strong>. This coordinate system helps us define bounding boxes regardless of actual image resolution.
+            </div>
+        </div>
+
+        <!-- Q66 -->
+        <div class="question-card" data-q="66">
+            <div class="question-number">Question 66</div>
+            <div class="question-text">In the bounding box notation, bh represents the...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Box height value</button>
+                <button class="choice-btn" data-choice="B">Box horizontal position</button>
+                <button class="choice-btn" data-choice="C">Background hue</button>
+                <button class="choice-btn" data-choice="D">Batch header size</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I defined in the lecture, <strong>bh</strong> stands for <strong>box height</strong>. The bounding box is defined by its center (bx, by), width (bw), and height (bh).
+            </div>
+        </div>
+
+        <!-- Q67 -->
+        <div class="question-card" data-q="67">
+            <div class="question-number">Question 67</div>
+            <div class="question-text">A simple classification network outputs only...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Box coordinates</button>
+                <button class="choice-btn" data-choice="B">Class label scores</button>
+                <button class="choice-btn" data-choice="C">Confidence scores</button>
+                <button class="choice-btn" data-choice="D">Grid divisions</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                Remember the classification output diagram? A simple classification network outputs only <strong>class probabilities</strong> (C1, C2, etc.). It does not output bounding boxes or confidence scores.
+            </div>
+        </div>
+
+        <!-- Q68 -->
+        <div class="question-card" data-q="68">
+            <div class="question-number">Question 68</div>
+            <div class="question-text">In the detection output vector, Pc represents the...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Number of predicted classes</button>
+                <button class="choice-btn" data-choice="B">Probability of class one</button>
+                <button class="choice-btn" data-choice="C">Object existence confidence</button>
+                <button class="choice-btn" data-choice="D">Pixel count in the box</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                As I explained, <strong>Pc</strong> is the probability confidence that an object exists in the grid cell. If Pc is high, the network believes an object is present; if Pc = 0, there is no object.
+            </div>
+        </div>
+
+        <!-- Q69 -->
+        <div class="question-card" data-q="69">
+            <div class="question-number">Question 69</div>
+            <div class="question-text">The values bx, by, bw, and bh in the output vector describe the...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Box coordinates</button>
+                <button class="choice-btn" data-choice="B">Class labels</button>
+                <button class="choice-btn" data-choice="C">Grid cell indices</button>
+                <button class="choice-btn" data-choice="D">Color channel values</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember the output vector diagram? <strong>bx, by, bw, and bh</strong> are the bounding box coordinates — center x, center y, width, and height. These define exactly where the object is located.
+            </div>
+        </div>
+
+        <!-- Q70 -->
+        <div class="question-card" data-q="70">
+            <div class="question-number">Question 70</div>
+            <div class="question-text">In the cat detection example, Pc equals 1 because...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Object is present</button>
+                <button class="choice-btn" data-choice="B">The class is cat</button>
+                <button class="choice-btn" data-choice="C">The box is large</button>
+                <button class="choice-btn" data-choice="D">The image is clear</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember Example 1? Pc = 1 means <strong>an object is present</strong> in that grid cell. The class information (c1, c2) then tells us which specific object it is.
+            </div>
+        </div>
+
+        <!-- Q71 -->
+        <div class="question-card" data-q="71">
+            <div class="question-number">Question 71</div>
+            <div class="question-text">When no object exists in a grid cell, the bounding box values in the loss function are...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Set to zero manually</button>
+                <button class="choice-btn" data-choice="B">Replaced with the previous frame</button>
+                <button class="choice-btn" data-choice="C">Ignored and not considered</button>
+                <button class="choice-btn" data-choice="D">Predicted using random values</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                Remember Example 2? When Pc = 0, the bounding box values are marked as "Don't Care." We <strong>ignore them</strong> and do not consider them while calculating the loss function.
+            </div>
+        </div>
+
+        <!-- Q72 -->
+        <div class="question-card" data-q="72">
+            <div class="question-number">Question 72</div>
+            <div class="question-text">In the sliding window approach, the window moves across the image in...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Random jumps</button>
+                <button class="choice-btn" data-choice="B">Large leaps</button>
+                <button class="choice-btn" data-choice="C">Small steps</button>
+                <button class="choice-btn" data-choice="D">Circular motion</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                As I explained, we slide the window over the image by <strong>small steps</strong>. At each position, we perform a classification to check if an object is inside that window.
+            </div>
+        </div>
+
+        <!-- Q73 -->
+        <div class="question-card" data-q="73">
+            <div class="question-number">Question 73</div>
+            <div class="question-text">At each window position in sliding window, the system performs a...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Regular classification</button>
+                <button class="choice-btn" data-choice="B">Bounding box regression</button>
+                <button class="choice-btn" data-choice="C">Object tracking update</button>
+                <button class="choice-btn" data-choice="D">Semantic segmentation</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember the sliding window steps? At each position, we do a <strong>regular classification problem</strong> to find the class of the image inside that window. We then give a score for that prediction.
+            </div>
+        </div>
+
+        <!-- Q74 -->
+        <div class="question-card" data-q="74">
+            <div class="question-number">Question 74</div>
+            <div class="question-text">IoU is calculated by comparing the predicted box against the...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Ground truth box</button>
+                <button class="choice-btn" data-choice="B">Previous frame box</button>
+                <button class="choice-btn" data-choice="C">Image border</button>
+                <button class="choice-btn" data-choice="D">Grid cell center</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I defined it, IoU compares the <strong>predicted box</strong> against the <strong>ground truth box</strong> (also called the actual box). The ratio of intersection to union tells us how accurate the prediction is.
+            </div>
+        </div>
+
+        <!-- Q75 -->
+        <div class="question-card" data-q="75">
+            <div class="question-number">Question 75</div>
+            <div class="question-text">An IoU score of 0.96 indicates a...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Failed detection</button>
+                <button class="choice-btn" data-choice="B">Good prediction</button>
+                <button class="choice-btn" data-choice="C">Partial overlap</button>
+                <button class="choice-btn" data-choice="D">Missing object</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                Remember the bird examples? IoU = 0.96 means the predicted box almost perfectly overlaps with the ground truth. This is a <strong>good prediction</strong>.
+            </div>
+        </div>
+
+        <!-- Q76 -->
+        <div class="question-card" data-q="76">
+            <div class="question-number">Question 76</div>
+            <div class="question-text">A major limitation of sliding window is that box dimensions are...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Too flexible</button>
+                <button class="choice-btn" data-choice="B">Randomly generated</button>
+                <button class="choice-btn" data-choice="C">Fixed to window size</button>
+                <button class="choice-btn" data-choice="D">Always square</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                As I explained, the dimensions of bounding boxes are not flexible — they <strong>depend on the predefined dimensions of the sliding window</strong>. This makes the approach inaccurate for objects of varying sizes.
+            </div>
+        </div>
+
+        <!-- Q77 -->
+        <div class="question-card" data-q="77">
+            <div class="question-number">Question 77</div>
+            <div class="question-text">Sliding window is very slow because it requires running the network...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Several times per image</button>
+                <button class="choice-btn" data-choice="B">Only once per image</button>
+                <button class="choice-btn" data-choice="C">In parallel on all pixels</button>
+                <button class="choice-btn" data-choice="D">On a reduced resolution</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember the drawback I emphasized? We need to slide the window by small steps, so we must go through the network <strong>several times per image</strong>. This makes it very slow and unsuitable for video.
+            </div>
+        </div>
+
+        <!-- Q78 -->
+        <div class="question-card" data-q="78">
+            <div class="question-number">Question 78</div>
+            <div class="question-text">YOLO stands for...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">You Only Look Once</button>
+                <button class="choice-btn" data-choice="B">Your Object Location Optimizer</button>
+                <button class="choice-btn" data-choice="C">Yielding Object Lists Online</button>
+                <button class="choice-btn" data-choice="D">Yellow Object Localization Output</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I introduced it, <strong>YOLO</strong> stands for <strong>You Only Look Once</strong>. It was proposed in 2015 as a very efficient algorithm that solves the speed problem of sliding windows.
+            </div>
+        </div>
+
+        <!-- Q79 -->
+        <div class="question-card" data-q="79">
+            <div class="question-number">Question 79</div>
+            <div class="question-text">The YOLO algorithm was first proposed in the year...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">2010</button>
+                <button class="choice-btn" data-choice="B">2015</button>
+                <button class="choice-btn" data-choice="C">2020</button>
+                <button class="choice-btn" data-choice="D">2025</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                Remember when I discussed the timeline? The original YOLO algorithm was proposed in <strong>2015</strong> as a breakthrough in real-time object detection.
+            </div>
+        </div>
+
+        <!-- Q80 -->
+        <div class="question-card" data-q="80">
+            <div class="question-number">Question 80</div>
+            <div class="question-text">YOLO divides the input image into a grid of size...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">2 × 2</button>
+                <button class="choice-btn" data-choice="B">10 × 10</button>
+                <button class="choice-btn" data-choice="C">100 × 100</button>
+                <button class="choice-btn" data-choice="D">S × S</button>
+            </div>
+            <div class="explanation" data-correct="D">
+                As I outlined in the steps, YOLO divides the input image into an <strong>S × S grid</strong>. The value of S is a design parameter that determines the resolution of the detection grid.
+            </div>
+        </div>
+
+        <!-- Q81 -->
+        <div class="question-card" data-q="81">
+            <div class="question-number">Question 81</div>
+            <div class="question-text">Each grid cell in YOLO calculates an output vector containing...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Confidence, box, and classes</button>
+                <button class="choice-btn" data-choice="B">Only the class label</button>
+                <button class="choice-btn" data-choice="C">Pixel intensity values</button>
+                <button class="choice-btn" data-choice="D">Image compression data</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember step 3? Each cell calculates an output vector containing <strong>Pc</strong> (confidence), <strong>bx, by, bw, bh</strong> (box coordinates), and <strong>c1, c2, ...</strong> (class probabilities).
+            </div>
+        </div>
+
+        <!-- Q82 -->
+        <div class="question-card" data-q="82">
+            <div class="question-number">Question 82</div>
+            <div class="question-text">YOLO can accept an input image of...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Any image size</button>
+                <button class="choice-btn" data-choice="B">Exactly 224 pixels</button>
+                <button class="choice-btn" data-choice="C">Only square format</button>
+                <button class="choice-btn" data-choice="D">Grayscale only</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I stated in step 1, YOLO takes an input image of <strong>any size</strong>. This flexibility is one of its advantages — you are not restricted to a fixed input resolution.
+            </div>
+        </div>
+
+        <!-- Q83 -->
+        <div class="question-card" data-q="83">
+            <div class="question-number">Question 83</div>
+            <div class="question-text">In the YOLO grid visualization, the colored dots mark the...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Grid corners</button>
+                <button class="choice-btn" data-choice="B">Bounding box edges</button>
+                <button class="choice-btn" data-choice="C">Object centers</button>
+                <button class="choice-btn" data-choice="D">Image corners</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                Remember the dog-and-cat grid images? The colored dots mark the <strong>object center points</strong>. These centers determine which grid cell is responsible for detecting each object.
+            </div>
+        </div>
+
+        <!-- Q84 -->
+        <div class="question-card" data-q="84">
+            <div class="question-number">Question 84</div>
+            <div class="question-text">YOLO splits the image into equal-sized...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Triangles</button>
+                <button class="choice-btn" data-choice="B">Circles</button>
+                <button class="choice-btn" data-choice="C">Grid cells</button>
+                <button class="choice-btn" data-choice="D">Pyramids</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                As I explained in step 2, YOLO divides the image into equal-sized <strong>grid cells</strong>. Each cell becomes responsible for detecting objects whose centers fall inside it.
+            </div>
+        </div>
+
+        <!-- Q85 -->
+        <div class="question-card" data-q="85">
+            <div class="question-number">Question 85</div>
+            <div class="question-text">A grid cell is assigned an object only if the object's center lies...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Inside that cell</button>
+                <button class="choice-btn" data-choice="B">Outside the image</button>
+                <button class="choice-btn" data-choice="C">On the grid boundary</button>
+                <button class="choice-btn" data-choice="D">In a neighboring cell</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                This is a crucial rule I emphasized: a cell is said to have an object only if the <strong>object center lies inside that cell</strong>. This prevents multiple cells from claiming the same object.
+            </div>
+        </div>
+
+        <!-- Q86 -->
+        <div class="question-card" data-q="86">
+            <div class="question-number">Question 86</div>
+            <div class="question-text">During training, the output vector values from each cell get...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Closer to true values</button>
+                <button class="choice-btn" data-choice="B">Randomly shuffled</button>
+                <button class="choice-btn" data-choice="C">Reset to zero</button>
+                <button class="choice-btn" data-choice="D">Duplicated across cells</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I explained, the resulted vectors may be different from the "true" values initially, but with training, the vector values get <strong>closer to the true values</strong>. This is how the network learns to localize accurately.
+            </div>
+        </div>
+
+        <!-- Q87 -->
+        <div class="question-card" data-q="87">
+            <div class="question-number">Question 87</div>
+            <div class="question-text">The final YOLO network output has the shape of a...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Single scalar value</button>
+                <button class="choice-btn" data-choice="B">Binary string</button>
+                <button class="choice-btn" data-choice="C">3D tensor matrix</button>
+                <button class="choice-btn" data-choice="D">Two-element vector</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                Remember the output shape diagram? The network output is a <strong>3D tensor</strong> (or matrix) with dimensions S × S × (5 + number of classes). This tensor structure replaces the need for fully connected layers.
+            </div>
+        </div>
+
+        <!-- Q88 -->
+        <div class="question-card" data-q="88">
+            <div class="question-number">Question 88</div>
+            <div class="question-text">YOLO replaces fully connected layers with convolutional layers because the output is a...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Vector of probabilities</button>
+                <button class="choice-btn" data-choice="B">List of file names</button>
+                <button class="choice-btn" data-choice="C">Matrix of predictions</button>
+                <button class="choice-btn" data-choice="D">Single confidence score</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                As I explained, YOLO uses only CNN layers because the targeted output is a <strong>matrix of predictions</strong>. Once this matrix is generated, we can directly plot the bounding boxes without needing fully connected layers.
+            </div>
+        </div>
+
+        <!-- Q89 -->
+        <div class="question-card" data-q="89">
+            <div class="question-number">Question 89</div>
+            <div class="question-text">Before applying NMS, YOLO often produces multiple...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Boxes for the same object</button>
+                <button class="choice-btn" data-choice="B">Class labels for one box</button>
+                <button class="choice-btn" data-choice="C">Images at different scales</button>
+                <button class="choice-btn" data-choice="D">Grid cells without objects</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember the duplicate boxes problem I showed? Before NMS, YOLO may produce <strong>several boxes for the same object</strong>. NMS cleans this up by keeping only the best prediction.
+            </div>
+        </div>
+
+        <!-- Q90 -->
+        <div class="question-card" data-q="90">
+            <div class="question-number">Question 90</div>
+            <div class="question-text">Non-Maximum Suppression is used to remove duplicate or...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Low-confidence boxes</button>
+                <button class="choice-btn" data-choice="B">High-resolution images</button>
+                <button class="choice-btn" data-choice="C">Large batch sizes</button>
+                <button class="choice-btn" data-choice="D">Training epochs</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I explained, NMS is an algorithm applied after predicting boundary boxes. Its goal is to <strong>remove duplicate or low-confidence bounding boxes</strong>, retaining only the most confident detections.
+            </div>
+        </div>
+
+        <!-- Q91 -->
+        <div class="question-card" data-q="91">
+            <div class="question-number">Question 91</div>
+            <div class="question-text">During NMS, the algorithm first accepts the box with the highest...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">IoU value</button>
+                <button class="choice-btn" data-choice="B">Confidence score</button>
+                <button class="choice-btn" data-choice="C">Box width</button>
+                <button class="choice-btn" data-choice="D">Class count</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                Remember the NMS steps? Within each class, we consider the highest <strong>Pc (confidence score)</strong> as an accepted prediction. All other boxes are compared against this accepted box.
+            </div>
+        </div>
+
+        <!-- Q92 -->
+        <div class="question-card" data-q="92">
+            <div class="question-number">Question 92</div>
+            <div class="question-text">If an unprocessed box overlaps an accepted box with IoU greater than 0.5, it is...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Merged with the accepted box</button>
+                <button class="choice-btn" data-choice="B">Resized to match exactly</button>
+                <button class="choice-btn" data-choice="C">Discarded as duplicate</button>
+                <button class="choice-btn" data-choice="D">Moved to another cell</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                As I explained, we discard any overlapping box with <strong>IoU > 0.5</strong> (you can change this threshold). This box is considered a duplicate of the already-accepted prediction.
+            </div>
+        </div>
+
+        <!-- Q93 -->
+        <div class="question-card" data-q="93">
+            <div class="question-number">Question 93</div>
+            <div class="question-text">NMS operates separately within each...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Object class</button>
+                <button class="choice-btn" data-choice="B">Grid row</button>
+                <button class="choice-btn" data-choice="C">Image channel</button>
+                <button class="choice-btn" data-choice="D">Bounding box corner</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember the NMS detail I emphasized? It operates <strong>within each class separately</strong>. This means cats are compared against cats, and dogs are compared against dogs, not against each other.
+            </div>
+        </div>
+
+        <!-- Q94 -->
+        <div class="question-card" data-q="94">
+            <div class="question-number">Question 94</div>
+            <div class="question-text">YOLO can detect two cats in one image because their predicted boxes have...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Low mutual IoU</button>
+                <button class="choice-btn" data-choice="B">Identical coordinates</button>
+                <button class="choice-btn" data-choice="C">The same center point</button>
+                <button class="choice-btn" data-choice="D">High overlapping area</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I explained, two cats can both be detected because the <strong>IoU between their boxes is low</strong> (below the threshold). Since they don't overlap much, NMS does not discard either box as a duplicate.
+            </div>
+        </div>
+
+        <!-- Q95 -->
+        <div class="question-card" data-q="95">
+            <div class="question-number">Question 95</div>
+            <div class="question-text">The final YOLO output displays bounding boxes along with...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Grid cell numbers</button>
+                <button class="choice-btn" data-choice="B">Class labels and scores</button>
+                <button class="choice-btn" data-choice="C">Training loss values</button>
+                <button class="choice-btn" data-choice="D">Layer activation maps</button>
+            </div>
+            <div class="explanation" data-correct="B">
+                Remember the final output examples? The boxes come with <strong>class labels</strong> (like "Cat" or "Dog") and <strong>confidence scores</strong> (like 0.8 or 0.9) displayed on top of each box.
+            </div>
+        </div>
+
+        <!-- Q96 -->
+        <div class="question-card" data-q="96">
+            <div class="question-number">Question 96</div>
+            <div class="question-text">In the YOLO summary, step 2 is...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Bounding box prediction</button>
+                <button class="choice-btn" data-choice="B">Non-maximum suppression</button>
+                <button class="choice-btn" data-choice="C">Image grid division</button>
+                <button class="choice-btn" data-choice="D">Final output generation</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                Remember the five-step summary? Step 1 is Input Image, and <strong>Step 2 is Grid Division</strong> — dividing the image into an S × S grid. This happens before any bounding box prediction.
+            </div>
+        </div>
+
+        <!-- Q97 -->
+        <div class="question-card" data-q="97">
+            <div class="question-number">Question 97</div>
+            <div class="question-text">YOLO26 eliminates the need for the traditional...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">NMS post-processing</button>
+                <button class="choice-btn" data-choice="B">Grid division step</button>
+                <button class="choice-btn" data-choice="C">Bounding box prediction</button>
+                <button class="choice-btn" data-choice="D">Confidence scoring</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                Remember the YOLO26 section? The key innovation is that it eliminates the traditional <strong>NMS post-processing</strong> step. The network handles overlapping predictions internally.
+            </div>
+        </div>
+
+        <!-- Q98 -->
+        <div class="question-card" data-q="98">
+            <div class="question-number">Question 98</div>
+            <div class="question-text">YOLO26 is described as an end-to-end model because it produces...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Clean output directly</button>
+                <button class="choice-btn" data-choice="B">Raw predictions only</button>
+                <button class="choice-btn" data-choice="C">Multiple intermediate files</button>
+                <button class="choice-btn" data-choice="D">Separate classifiers</button>
+            </div>
+            <div class="explanation" data-correct="A">
+                As I explained, YOLO26 is end-to-end because it produces <strong>clean output directly</strong> from the network. You don't need a separate NMS algorithm after the forward pass.
+            </div>
+        </div>
+
+        <!-- Q99 -->
+        <div class="question-card" data-q="99">
+            <div class="question-number">Question 99</div>
+            <div class="question-text">In YOLO26, overlapping predictions are resolved...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">By an external script</button>
+                <button class="choice-btn" data-choice="B">Through manual review</button>
+                <button class="choice-btn" data-choice="C">By ignoring small objects</button>
+                <button class="choice-btn" data-choice="D">Inside the network itself</button>
+            </div>
+            <div class="explanation" data-correct="D">
+                Remember the comparison diagram? In YOLO26, <strong>overlapping predictions are handled inside the network itself</strong>. This is learned behavior, not a post-processing heuristic.
+            </div>
+        </div>
+
+        <!-- Q100 -->
+        <div class="question-card" data-q="100">
+            <div class="question-number">Question 100</div>
+            <div class="question-text">In the traditional YOLO pipeline, the NMS algorithm sits between...</div>
+            <div class="choices">
+                <button class="choice-btn" data-choice="A">Input image and CNN</button>
+                <button class="choice-btn" data-choice="B">CNN training and validation</button>
+                <button class="choice-btn" data-choice="C">Raw predictions and clean output</button>
+                <button class="choice-btn" data-choice="D">Grid division and box prediction</button>
+            </div>
+            <div class="explanation" data-correct="C">
+                Remember the pipeline comparison I showed? In the traditional YOLO, the flow is: Input → CNN → Raw Predictions → <strong>NMS Algorithm</strong> → Clean Output. NMS sits between the raw predictions and the final clean output.
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const totalQuestions = 100;
+        let answered = 0;
+        let correctCount = 0;
+        const answeredQuestions = new Set();
+
+        document.querySelectorAll('.question-card').forEach(card => {
+            const buttons = card.querySelectorAll('.choice-btn');
+            const explanation = card.querySelector('.explanation');
+            const correctAnswer = explanation.dataset.correct;
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const qNum = card.dataset.q;
+                    if (answeredQuestions.has(qNum)) return;
+                    answeredQuestions.add(qNum);
+
+                    const selected = this.dataset.choice;
+                    const isCorrect = selected === correctAnswer;
+
+                    if (isCorrect) correctCount++;
+
+                    buttons.forEach(b => {
+                        b.disabled = true;
+                        if (b.dataset.choice === correctAnswer) {
+                            b.classList.add('correct');
+                        } else if (b === this && !isCorrect) {
+                            b.classList.add('wrong');
+                        } else {
+                            b.classList.add('inactive');
+                        }
+                    });
+
+                    explanation.classList.add('show');
+                    answered++;
+                    updateProgress();
+                });
+            });
+        });
+
+        function updateProgress() {
+            document.getElementById('progressText').textContent = `${answered} / ${totalQuestions} answered`;
+            document.getElementById('progressFill').style.width = `${(answered / totalQuestions) * 100}%`;
+            document.getElementById('scoreDisplay').textContent = `${correctCount} correct`;
+        }
+    </script>
+
+</body>
+</html>
